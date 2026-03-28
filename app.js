@@ -1097,17 +1097,26 @@ function renderDrawResult(drawResult) {
 
 function renderDrawSummary(drawResult) {
   const item = drawResult.item ?? drawResult.result ?? drawResult.draw ?? drawResult;
+  const summary = drawResult.summary ?? {};
   const rarity = normalizeRarity(item.rarity ?? item.rank ?? "common");
   const converted = Boolean(item.convertedToShards ?? item.duplicate ?? item.isDuplicate);
   const shardCount = numberOrZero(item.shardCount ?? item.fragmentCount ?? item.shardDelta ?? 0);
   const name = item.name ?? item.title ?? "알 수 없는 꼬모";
   const icon = item.icon ?? item.emoji ?? "◌";
+  const tickets = summary.tickets ?? drawResult.inventory ?? {};
   return `
     <div class="reward-item">
       <div class="rarity ${rarity}">${rarity}</div>
       <div class="icon">${escapeHtml(icon)}</div>
       <strong>${escapeHtml(name)}</strong>
       <p>${converted ? `중복이어서 파편 ${shardCount}개로 바뀌었어요.` : "새로운 꼬모를 얻었어요."}</p>
+      <div class="mini-stack">
+        <span>일반권 ${numberOrZero(tickets.normalTickets ?? tickets.normal ?? 0)}</span>
+        <span>특별권 ${numberOrZero(tickets.specialTickets ?? tickets.special ?? 0)}</span>
+        <span>파편 ${numberOrZero(tickets.shards ?? 0)}</span>
+        <span>컬렉션 ${numberOrZero(summary.collectionCount ?? 0)}</span>
+      </div>
+      ${summary.autoFeaturedKkomoId ? `<div class="code-line">대표 꼬모로 자동 지정됐어요.</div>` : ""}
     </div>
   `;
 }
