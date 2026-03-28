@@ -132,7 +132,7 @@ function onAppClick(event) {
     if (input instanceof HTMLInputElement) {
       state.apiBase = normalizeApiBase(input.value);
       window.localStorage.setItem(STORAGE_KEYS.apiBase, state.apiBase);
-      showToast("API 주소를 저장했어요.");
+      showToast("연결 주소를 저장했어요.");
       render();
       void syncSessionAndData();
     }
@@ -546,9 +546,9 @@ function renderPublicPage() {
           <div class="hero-copy">
             <div class="official-banner">
               <span class="tiny-pill">꼬모 웹 공책</span>
-              <span class="tiny-pill">모바일 랜딩</span>
+              <span class="tiny-pill">모바일 전용</span>
             </div>
-            <p class="eyebrow">Notebook landing</p>
+            <p class="eyebrow">내 공책을 여는 곳</p>
             <h1>카카오에서 풀던 공부를<br /><span class="marker">웹 공책에 차곡차곡</span> 모아요.</h1>
             <p>
               꼬모는 카카오톡에서 질문과 퀴즈를 돕고, 웹은 프로필·뽑기·도감·꾸미기를 한눈에 보는 공책이에요.
@@ -556,7 +556,13 @@ function renderPublicPage() {
             </p>
             <div class="hero-actions">
               <a class="button primary" href="#player-connect">열쇠 코드로 열기</a>
+              <a class="button secondary" href="#player-connect">카카오에서 코드 받기</a>
               <a class="button secondary" href="#web-features">공책 미리보기</a>
+            </div>
+            <div class="hero-guide">
+              <span>1. 카카오톡에서 꼬모를 열어요.</span>
+              <span>2. 열쇠 코드를 받아요.</span>
+              <span>3. 웹 공책을 열고 모은 꼬모를 봐요.</span>
             </div>
             <div class="proof-row">
               <article class="proof-card">
@@ -614,15 +620,15 @@ function renderPublicPage() {
           <div class="section-head">
             <div>
               <p class="eyebrow">공책 구성</p>
-              <h2>웹에서는 모은 것과 지금 상태를 한눈에 봐요.</h2>
+              <h2>웹에서는 지금 상태와 모은 것만 깔끔하게 봐요.</h2>
             </div>
-            <p>화면은 단순하게, 버튼은 크게, 글은 바로 읽히게 정리했습니다.</p>
+            <p>화면은 단순하게, 버튼은 크게, 글은 바로 읽히게 정리했어요.</p>
           </div>
 
           <div class="feature-grid feature-grid-strong">
             <article class="feature-card feature-card-bright">
               <strong>내 정보</strong>
-              <p>학교급, 오늘 기록, 총점, 플레이어 ID, 닉네임을 한 장에 모아요.</p>
+              <p>학교급, 오늘 기록, 총점, 플레이어 ID, 닉네임만 한 장에 모아요.</p>
               <div class="code-line">내 공책은 이름부터 보이게 해요.</div>
             </article>
             <article class="feature-card">
@@ -644,7 +650,7 @@ function renderPublicPage() {
               <p class="eyebrow">꼬모 도감</p>
               <h2>꼬모는 둥근 카드로 모으는 느낌이 잘 어울려요.</h2>
             </div>
-            <p>뽑기 기계에서 나온 캡슐처럼, 원형 카드가 하나씩 열리는 컨셉으로 잡았습니다.</p>
+            <p>뽑기 기계에서 나온 캡슐처럼, 원형 카드가 하나씩 열리는 컨셉이에요.</p>
           </div>
 
           <div class="collection-teaser">
@@ -668,6 +674,11 @@ function renderPublicPage() {
               <p class="subtle" style="margin-top:10px">
                 열쇠 코드만 넣으면 내 프로필, 뽑기, 도감, 꾸미기가 열려요.
               </p>
+              <div class="step-strip" aria-label="공책 열기 순서">
+                <span>카카오톡</span>
+                <span>열쇠 코드</span>
+                <span>내 공책</span>
+              </div>
               <div class="auth-form">
                 <div class="field">
                   <label for="code">열쇠 코드</label>
@@ -682,9 +693,9 @@ function renderPublicPage() {
                 </p>
               </div>
               <details class="advanced-connection">
-                <summary>연결 주소 바꾸기</summary>
+                <summary>연결이 안 될 때</summary>
                 <div class="field field-offset">
-                  <label for="apiBase">서버 주소(선택)</label>
+                  <label for="apiBase">연결 주소(도움말)</label>
                   <input id="apiBase" name="apiBase" data-field="api-base" value="${escapeAttribute(state.apiBase)}" placeholder="https://api.example.com" />
                 </div>
                 <div class="button-row">
@@ -705,15 +716,15 @@ function renderPublicPage() {
                 <div class="support-list">
                   <div class="support-item">
                     <strong>프로필</strong>
-                    <p>이름, ID, 대표 꼬모, 프레임, 오늘 상태를 봐요.</p>
+                    <p>학교급, 오늘 기록, 오늘 총점, 플레이어 ID를 한 화면에서 봐요.</p>
                   </div>
                   <div class="support-item">
-                    <strong>뽑기</strong>
-                    <p>티켓을 골라서 바로 돌리고, 결과를 확인해요.</p>
+                    <strong>꼬모 뽑기</strong>
+                    <p>일반권과 특별권으로 꼬모 캡슐을 열고, 바로 결과를 확인해요.</p>
                   </div>
                   <div class="support-item">
                     <strong>도감 / 꾸미기</strong>
-                    <p>얻은 꼬모를 모으고, 이름과 프레임을 바꿔요.</p>
+                    <p>모은 꼬모를 도감처럼 보고, 닉네임과 대표 꼬모를 정해요.</p>
                   </div>
                 </div>
               </div>
@@ -765,11 +776,11 @@ function renderPlayerPage() {
               <p class="player-handle">${escapeHtml(formatPlayerHandle(me))}</p>
               <p>
                 오늘의 공부와 모은 꼬모를 한 번에 보는 개인 공책이에요.
-                이름은 부드럽게, 기록은 한눈에 보여줘요.
+                이름은 다정하게, 기록은 가볍게, 꼬모는 차곡차곡 모아두는 공책으로 정리했어요.
               </p>
               <div class="hero-actions">
-                <button class="button primary" type="button" data-action="draw-gacha">바로 뽑기</button>
-                <a class="button secondary" href="#collection">도감 보기</a>
+                <button class="button primary" type="button" data-action="draw-gacha">꼬모 뽑기</button>
+                <a class="button secondary" href="#collection">내 도감 보기</a>
               </div>
             </div>
           </div>
@@ -795,7 +806,7 @@ function renderPlayerPage() {
             </div>
 
             <div class="side-card side-card-soft">
-              <strong>오늘 기록</strong>
+              <strong>오늘 공책 요약</strong>
               <p>${escapeHtml(me?.todayRecord ?? "대기")}</p>
               <div class="mini-stack">
                 <span>학교급 ${escapeHtml(me?.schoolStage ?? "general")}</span>
@@ -817,10 +828,10 @@ function renderPlayerPage() {
 
           <div class="player-console">
             <div class="tabbar" role="tablist" aria-label="플레이어 탭">
-              ${renderTabButton("profile", "내 정보", "이름, 학교급, 오늘 기록")}
+              ${renderTabButton("profile", "프로필", "학교급 · 기록 · 대표 꼬모")}
               ${renderTabButton("gacha", "뽑기", "티켓으로 꼬모를 뽑아요")}
               ${renderTabButton("collection", "도감", "모은 꼬모를 모아봐요")}
-              ${renderTabButton("customize", "꾸미기", "이름과 프레임")}
+              ${renderTabButton("customize", "꾸미기", "닉네임 · 프레임")}
             </div>
 
             <div class="panel-grid">
@@ -921,8 +932,8 @@ function renderGachaPanel() {
       </div>
       <div class="split">
         <div class="card card-surface">
-          <strong>뽑기 기계</strong>
-          <p>작은 캡슐을 돌리듯, 꼬모를 하나씩 열어봐요.</p>
+          <strong>꼬모 캡슐 뽑기</strong>
+          <p>동그란 캡슐에서 꼬모가 톡 나오듯, 하나씩 가볍게 열어봐요.</p>
           <div class="gacha-machine" aria-hidden="true">
             <div class="gacha-orb">${escapeHtml(state.drawResult?.item?.icon ?? state.drawResult?.result?.icon ?? "◌")}</div>
           </div>
@@ -938,7 +949,7 @@ function renderGachaPanel() {
           </div>
         </div>
         <div class="card card-surface">
-          <strong>최근 결과</strong>
+          <strong>방금 열린 꼬모</strong>
           ${state.drawResult ? renderDrawSummary(state.drawResult) : `<p>아직 뽑은 꼬모가 없어요. 한 번 돌리면 결과가 여기 열려요.</p>`}
         </div>
       </div>
@@ -1005,7 +1016,7 @@ function renderCustomizePanel() {
       <form class="customize-grid" data-form="customize">
         <div class="card card-surface">
           <strong>닉네임</strong>
-          <p>웹 공책에 보이는 이름이에요. 플레이어 ID는 그대로 유지돼요.</p>
+          <p>웹 공책에 보이는 이름이에요. 플레이어 ID는 그대로 남고, 닉네임만 바뀌어요.</p>
           <div class="field field-offset">
             <label for="nickname">닉네임</label>
             <input
@@ -1117,14 +1128,14 @@ function renderDrawSummary(drawResult) {
       <div class="rarity ${rarity}">${rarity}</div>
       <div class="icon round-icon round-icon-large">${escapeHtml(icon)}</div>
       <strong>${escapeHtml(name)}</strong>
-      <p>${converted ? `중복이라 파편 ${shardCount}개로 바뀌었어요.` : "새로운 꼬모를 만났어요."}</p>
+      <p>${converted ? `중복이라 파편 ${shardCount}개로 바뀌었어요.` : "새 꼬모를 만났어요."}</p>
       <div class="mini-stack">
         <span>일반권 ${numberOrZero(tickets.normalTickets ?? tickets.normal ?? 0)}</span>
         <span>특별권 ${numberOrZero(tickets.specialTickets ?? tickets.special ?? 0)}</span>
         <span>파편 ${numberOrZero(tickets.shards ?? 0)}</span>
         <span>컬렉션 ${numberOrZero(summary.collectionCount ?? 0)}</span>
       </div>
-      ${summary.autoFeaturedKkomoId ? `<div class="code-line">대표 꼬모로 자동 지정됐어요.</div>` : ""}
+      ${summary.autoFeaturedKkomoId ? `<div class="code-line">이번 꼬모를 대표로 먼저 걸어뒀어요.</div>` : ""}
     </div>
   `;
 }
@@ -1315,6 +1326,15 @@ function runMotion(context = {}) {
         { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.4)" }
       );
     }
+
+    gsap.to(root.querySelectorAll(".gacha-orb, .round-icon"), {
+      rotate: 4,
+      duration: 5,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      stagger: 0.08
+    });
 
     const collectionCards = root.querySelectorAll(".collection-grid .item-card");
     if (collectionCards.length) {
