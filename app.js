@@ -243,6 +243,8 @@ function normalizeMe(payload) {
   const data = payload?.data ?? payload ?? {};
   const profile = data.profile ?? data.me ?? data;
   return {
+    playerHandle: profile.playerHandle ?? data.playerHandle ?? data.publicId ?? data.handle ?? "",
+    nickname: profile.nickname ?? data.nickname ?? profile.displayName ?? data.displayName ?? "",
     playerName: profile.displayName ?? profile.nickname ?? data.displayName ?? "꼬모 플레이어",
     schoolStage: profile.schoolStage ?? data.schoolStage ?? "general",
     gradeLabel: profile.gradeLabel ?? data.gradeLabel ?? "자동 맞춤",
@@ -442,20 +444,26 @@ async function saveCustomization() {
   }
   const representativeKkomo = form.querySelector("[name='representativeKkomo']");
   const representativeFrame = form.querySelector("[name='representativeFrame']");
+  const nicknameField = form.querySelector("[name='nickname']");
   try {
     const payload = await apiFetch("/api/web/profile/customize", {
       method: "POST",
       body: JSON.stringify({
         featuredKkomoId: representativeKkomo instanceof HTMLSelectElement ? representativeKkomo.value : "default",
-        frameId: representativeFrame instanceof HTMLSelectElement ? representativeFrame.value : "none"
+        frameId: representativeFrame instanceof HTMLSelectElement ? representativeFrame.value : "none",
+        nickname: nicknameField instanceof HTMLInputElement ? nicknameField.value.trim() : ""
       })
     });
     const customization = payload?.data?.customization ?? payload?.data ?? payload?.customization ?? payload ?? null;
+    const identity = payload?.data?.identity ?? payload?.identity ?? null;
     if (state.me && customization) {
       state.me.customization = {
         representativeKkomo: customization.featuredKkomoId ?? state.me.customization?.representativeKkomo ?? "default",
         representativeFrame: customization.frameId ?? state.me.customization?.representativeFrame ?? "none"
       };
+      if (identity?.nickname) {
+        state.me.nickname = identity.nickname;
+      }
       persistSnapshot();
     }
     showToast("꾸미기를 저장했어요.");
@@ -518,138 +526,196 @@ function renderPublicPage() {
   const cached = state.me;
   const hasPreview = Boolean(cached);
   return `
-    <main class="page">
+    <main class="page page-public">
       <div class="container">
-        <div class="topbar">
+        <header class="topbar">
           <div class="brand">
             <div class="brand-mark">꼬</div>
             <div class="brand-copy">
               <strong>꼬모</strong>
-              <span>공식 웹사이트 · 질문 · 퀴즈 · 프로필 · 뽑기</span>
+              <span>공식 사이트 · 학습은 카카오톡, 정리는 웹에서</span>
             </div>
           </div>
-          <div class="status-pill ok">GitHub Pages · Kkomo official</div>
-        </div>
+          <div class="topbar-actions">
+            <span class="status-pill ok">공식 랜딩</span>
+            <a class="button secondary" href="#player-connect">플레이어 열기</a>
+          </div>
+        </header>
 
-        <section class="shell">
-          <section class="hero">
+        <section class="landing-hero">
+          <div class="hero-copy">
             <div class="official-banner">
-              <span class="tiny-pill">공식 웹사이트</span>
-              <span class="tiny-pill">Signed link player mode</span>
+              <span class="tiny-pill">공개 랜딩</span>
+              <span class="tiny-pill">signed link player mode</span>
             </div>
-            <p class="eyebrow">공개 랜딩 / 플레이어 모드</p>
-            <h1>카톡에서 이어진 공부를<br /><span class="marker">웹에서 모아 정리한다.</span></h1>
+            <p class="eyebrow">Official Kkomo Site</p>
+            <h1>카카오에서 시작한 공부를<br /><span class="marker">웹의 공식 공간에 정리한다.</span></h1>
             <p>
-              꼬모는 초·중·고 교과 흐름을 유지하면서 질문, 퀴즈, 프로필을 한 번에 이어주는 학습 봇이에요.
-              이제 웹에서는 내가 모은 꼬모, 받은 보상, 대표 꾸미기를 한 화면에서 볼 수 있어요.
+              꼬모는 질문과 퀴즈를 즉시 처리하고, 웹은 프로필·보상·컬렉션·꾸미기를 쌓아두는 공식 허브입니다.
+              플레이어는 카카오에서 받은 서명 링크로만 들어옵니다.
             </p>
             <div class="hero-actions">
-              <a class="button primary" href="#how-it-works">서비스 보기</a>
-              <a class="button secondary" href="#player-connect">플레이어 모드 연결</a>
+              <a class="button primary" href="#player-connect">카카오에서 시작하기</a>
+              <a class="button secondary" href="#web-features">웹에서 할 수 있는 것</a>
             </div>
-
             <div class="proof-row">
               <article class="proof-card">
-                <strong>참여 우선</strong>
-                <p>정답률보다 출석, 연속 참여, 복습과 기여를 더 크게 반영해요.</p>
+                <strong>공식 랜딩</strong>
+                <p>소개와 진입 안내만 두고, 실제 플레이어 데이터는 따로 엽니다.</p>
               </article>
               <article class="proof-card">
-                <strong>서명 링크</strong>
-                <p>카카오에서 받은 1회성 코드로 플레이어 모드가 열려요.</p>
+                <strong>참여 기반 보상</strong>
+                <p>정답 경쟁보다 출석, 복습, 방 기여, 연속 참여를 더 크게 봅니다.</p>
               </article>
               <article class="proof-card">
-                <strong>중복 전환</strong>
-                <p>같은 꼬모는 자동으로 파편으로 바뀌고, 다음 성장 재화가 돼요.</p>
+                <strong>대표 정체성</strong>
+                <p>플레이어 ID, 닉네임, 대표 꼬모, 프레임으로 내 계정을 만듭니다.</p>
               </article>
             </div>
-          </section>
+          </div>
 
-          <section class="auth-card" id="player-connect">
-            <p class="eyebrow">플레이어 모드</p>
-            <h2>카카오에서 받은 링크를 붙이면<br />프로필과 컬렉션이 열려요.</h2>
-            <p class="subtle" style="margin-top:10px">
-              GitHub Pages는 공개 웹이고, 실제 데이터는 백엔드 API와 연결해 보여줍니다.
-            </p>
-            <form class="auth-form" data-form="connect">
-              <div class="field">
-                <label for="apiBase">API 주소</label>
-                <input id="apiBase" name="apiBase" data-field="api-base" value="${escapeAttribute(state.apiBase)}" placeholder="https://api.example.com" />
+          <aside class="hero-stage">
+            <div class="stage-frame">
+              <div class="stage-orbit">
+                <span class="preview-tag tag-a">공식</span>
+                <span class="preview-tag tag-b">보상</span>
+                <span class="preview-tag tag-c">컬렉션</span>
               </div>
-              <div class="field">
-                <label for="code">서명 코드</label>
-                <input id="code" name="code" placeholder="카카오에서 받은 one-time code" value="${escapeAttribute(state.draftCode)}" />
+              <div class="identity-card">
+                <div class="identity-head">
+                  <div class="identity-avatar">꼬</div>
+                  <div>
+                    <span class="eyebrow">플레이어 미리보기</span>
+                    <strong>${hasPreview ? escapeHtml(cached.nickname || cached.playerName) : "닉네임 / 플레이어 ID"}</strong>
+                    <p>${hasPreview ? escapeHtml(formatPlayerHandle(cached)) : "카카오 서명 링크로 열리는 플레이어 룸"}</p>
+                  </div>
+                </div>
+                <div class="identity-meta">
+                  <span>대표 꼬모 ${hasPreview ? escapeHtml(cached.customization?.representativeKkomo ?? "default") : "default"}</span>
+                  <span>프레임 ${hasPreview ? escapeHtml(cached.customization?.representativeFrame ?? "none") : "none"}</span>
+                  <span>오늘 총점 ${hasPreview ? numberOrZero(cached.todayTotalScore ?? 0) : "0"}점</span>
+                </div>
               </div>
-              <div class="button-row">
-                <button class="button primary" type="submit">연결하기</button>
-                <button class="button secondary" type="button" data-action="save-api-base">API 저장</button>
-                <button class="button secondary" type="button" data-action="copy-link">링크 복사</button>
+              <div class="stage-notes">
+                <div class="stage-note">
+                  <strong>웹 역할</strong>
+                  <p>프로필, 컬렉션, 뽑기, 꾸미기를 모아보는 정리 공간.</p>
+                </div>
+                <div class="stage-note">
+                  <strong>챗봇 역할</strong>
+                  <p>질문, 퀴즈, 정오답, 즉시 반응 같은 지금 순간의 학습.</p>
+                </div>
               </div>
-              <p class="footnote">
-                session exchange, profile, collection, gacha, customize, rewards API를 순서대로 읽어요.
+            </div>
+          </aside>
+        </section>
+
+        <section class="section section-bleed" id="web-features">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">IA</p>
+              <h2>웹에서는 쌓인 상태를 읽고, 모으고, 꾸밉니다.</h2>
+            </div>
+            <p>랜딩은 적은 장면으로, 플레이어는 한눈에 읽히는 상태판으로 정리했습니다.</p>
+          </div>
+
+          <div class="feature-grid feature-grid-strong">
+            <article class="feature-card feature-card-bright">
+              <strong>프로필 허브</strong>
+              <p>학교급, 오늘 기록, 총점, 플레이어 ID, 닉네임, 대표 꼬모를 한 화면에 둡니다.</p>
+              <div class="code-line">내 계정의 정체성을 먼저 보여주는 구성이에요.</div>
+            </article>
+            <article class="feature-card">
+              <strong>보상 루프</strong>
+              <p>일반권, 특별권, 파편을 분리해 보여주고, 참여가 어떻게 쌓였는지 설명합니다.</p>
+              <div class="code-line">출석과 복습이 뽑기권으로 이어집니다.</div>
+            </article>
+            <article class="feature-card">
+              <strong>컬렉션 중심</strong>
+              <p>획득한 꼬모를 희귀도와 중복 수까지 같이 보여주고, 공식 감각의 도감처럼 다룹니다.</p>
+              <div class="code-line">신규 획득은 강조하고, 잠금은 실루엣으로 정리합니다.</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section section-bleed">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">컬렉션 티저</p>
+              <h2>보유 여부보다, 공식 도감처럼 보이는 인상이 중요합니다.</h2>
+            </div>
+            <p>잠금 실루엣과 대표 카드 예시로 컬렉션 톤을 미리 보여줍니다.</p>
+          </div>
+
+          <div class="collection-teaser">
+            ${renderCollectionTeaserCards()}
+          </div>
+        </section>
+
+        <section class="section section-bleed" id="player-connect">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">플레이어 진입</p>
+              <h2>카카오에서 받은 서명 링크를 넣으면 플레이어 룸이 열립니다.</h2>
+            </div>
+            <p>공개 사이트와 플레이어 모드를 한 사이트 안에 분리해 둔 구조입니다.</p>
+          </div>
+
+          <div class="auth-grid">
+            <form class="auth-card auth-card-prominent" data-form="connect">
+              <p class="eyebrow">연결</p>
+              <h2>플레이어 모드 열기</h2>
+              <p class="subtle" style="margin-top:10px">
+                API 주소와 one-time code를 넣으면 프로필, 뽑기, 컬렉션, 꾸미기 화면을 불러옵니다.
               </p>
-            </form>
-          </section>
-        </section>
-
-        <section class="section" id="how-it-works">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">한눈에 보기</p>
-              <h2>꼬모 웹은 이렇게 흘러가요.</h2>
-            </div>
-            <p>기본은 공개 랜딩, 실제 데이터는 서명 링크로 들어간 플레이어 모드에서 열립니다.</p>
-          </div>
-
-          <div class="feature-grid">
-            <article class="feature-card">
-              <strong>프로필</strong>
-              <p>학교급, 오늘 기록, 총점, 대표 꼬모, 프레임을 한 번에 봅니다.</p>
-              <div class="code-line">카카오에서 받은 링크로 들어오면 프로필이 열려요.</div>
-            </article>
-            <article class="feature-card">
-              <strong>뽑기</strong>
-              <p>일반권과 특별권으로 꼬모를 뽑고, 중복은 파편으로 바뀝니다.</p>
-              <div class="code-line">참여 보상으로 뽑기권을 모아요.</div>
-            </article>
-            <article class="feature-card">
-              <strong>컬렉션</strong>
-              <p>획득한 꼬모를 rarity별로 모아 보고, 잠금 상태도 함께 확인합니다.</p>
-              <div class="code-line">신규 획득 꼬모는 바로 표시됩니다.</div>
-            </article>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">미리보기</p>
-              <h2>웹에서 보게 될 화면은<br />이런 느낌이에요.</h2>
-            </div>
-            <p>아직 연결되지 않아도 구조는 먼저 보여줄 수 있어요.</p>
-          </div>
-
-          <div class="preview-stage">
-            <div class="preview-orbit">
-              <div class="preview-tag tag-a">학습 기록</div>
-              <div class="preview-tag tag-b">꼬모 도감</div>
-              <div class="preview-tag tag-c">참여 보상</div>
-            </div>
-            ${hasPreview ? renderPreviewCard(cached) : renderEmptyPreview()}
-          </div>
-        </section>
-
-        <section class="support-section">
-          <div class="support-box" style="padding:20px">
-            <div class="section-title">
-              <h3>설정 상태</h3>
-              <div class="actions">
-                <span class="inline-badge">${state.apiBase ? `API ${escapeHtml(state.apiBase)}` : "API 미설정"}</span>
-                <span class="inline-badge">${state.token ? "세션 있음" : "세션 없음"}</span>
+              <div class="auth-form">
+                <div class="field">
+                  <label for="apiBase">API 주소</label>
+                  <input id="apiBase" name="apiBase" data-field="api-base" value="${escapeAttribute(state.apiBase)}" placeholder="https://api.example.com" />
+                </div>
+                <div class="field">
+                  <label for="code">서명 코드</label>
+                  <input id="code" name="code" placeholder="카카오에서 받은 one-time code" value="${escapeAttribute(state.draftCode)}" />
+                </div>
+                <div class="button-row">
+                  <button class="button primary" type="submit">플레이어 열기</button>
+                  <button class="button secondary" type="button" data-action="save-api-base">API 저장</button>
+                  <button class="button secondary" type="button" data-action="copy-link">링크 복사</button>
+                </div>
+                <p class="footnote">
+                  session exchange, profile, collection, gacha, customize, rewards API를 순서대로 읽습니다.
+                </p>
               </div>
-            </div>
-            <p class="subtle">
-              플레이어 모드로 들어가려면 카카오봇이 발급한 서명 코드가 필요해요. 같은 링크를 다시 쓰면 세션 만료 규칙에 따라 재연결이 필요할 수 있어요.
-            </p>
+            </form>
+
+            <aside class="support-section support-section-prominent">
+              <div class="support-box support-box-card">
+                <div class="section-title">
+                  <h3>웹에서 열리는 것</h3>
+                  <div class="actions">
+                    <span class="inline-badge">${state.apiBase ? `API ${escapeHtml(state.apiBase)}` : "API 미설정"}</span>
+                    <span class="inline-badge">${state.token ? "세션 있음" : "세션 없음"}</span>
+                  </div>
+                </div>
+                <div class="support-list">
+                  <div class="support-item">
+                    <strong>프로필</strong>
+                    <p>플레이어 ID, 닉네임, 대표 꼬모, 프레임, 오늘 상태.</p>
+                  </div>
+                  <div class="support-item">
+                    <strong>뽑기</strong>
+                    <p>티켓 종류를 고르고 바로 결과를 확인합니다.</p>
+                  </div>
+                  <div class="support-item">
+                    <strong>컬렉션 / 꾸미기</strong>
+                    <p>획득 꼬모, 중복, 파편, 대표 선택을 한 번에 다룹니다.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-stage preview-stage-compact">
+                ${hasPreview ? renderPreviewCard(cached) : renderEmptyPreview()}
+              </div>
+            </aside>
           </div>
         </section>
       </div>
@@ -664,110 +730,100 @@ function renderPlayerPage() {
   const drawResult = state.drawResult;
   const inventory = me?.tickets ?? { general: 0, special: 0, shards: 0 };
   const summaryLine = me
-    ? `${me.playerName} · ${me.gradeLabel ?? "자동 맞춤"} · ${me.schoolStage ?? "general"}`
+    ? `${formatPlayerIdentity(me)} · ${me.gradeLabel ?? "자동 맞춤"} · ${me.schoolStage ?? "general"}`
     : "연결 대기";
 
   return `
-    <main class="page">
+    <main class="page page-player">
       <div class="container">
-        <div class="topbar">
+        <header class="topbar">
           <div class="brand">
             <div class="brand-mark">꼬</div>
             <div class="brand-copy">
-              <strong>꼬모 플레이어</strong>
+              <strong>꼬모 플레이어 룸</strong>
               <span>${escapeHtml(summaryLine)}</span>
             </div>
           </div>
-          <div class="tab-actions">
+          <div class="topbar-actions">
             <span class="status-pill ${state.loading ? "warn" : state.token ? "ok" : "warn"}">${state.loading ? "동기화 중" : state.token ? "연결됨" : "연결 필요"}</span>
             <button class="button secondary" type="button" data-action="reload-data">새로고침</button>
             <button class="button secondary" type="button" data-action="clear-session">연결 해제</button>
           </div>
-        </div>
+        </header>
 
-        <section class="summary-grid">
-          <article class="value-card">
-            <strong>대표 꼬모</strong>
-            <div class="value">${escapeHtml(me?.customization?.representativeKkomo ?? "default")}</div>
-            <div class="meta">프레임 ${escapeHtml(me?.customization?.representativeFrame ?? "none")}</div>
-          </article>
-          <article class="value-card">
-            <strong>오늘 기록</strong>
-            <div class="value">${escapeHtml(me?.todayRecord ?? "대기")}</div>
-            <div class="meta">오늘 총점 ${numberOrZero(me?.todayTotalScore ?? 0)}점</div>
-          </article>
-          <article class="value-card">
-            <strong>뽑기권</strong>
-            <div class="value">${inventory.general} / ${inventory.special}</div>
-            <div class="meta">일반 / 특별 · 파편 ${inventory.shards}</div>
-          </article>
-          <article class="value-card">
-            <strong>컬렉션</strong>
-            <div class="value">${collection.length}</div>
-            <div class="meta">획득한 꼬모 수</div>
-          </article>
-        </section>
-
-        <section class="shell">
-          <section class="hero">
-            <div class="official-banner">
-              <span class="tiny-pill">플레이어 홈</span>
-              <span class="tiny-pill">공식 컬렉션</span>
-            </div>
-            <p class="eyebrow">플레이어 홈</p>
-            <h1>참여한 만큼<br /><span class="marker">모이고, 꾸며지고, 남는다.</span></h1>
-            <p>
-              꼬모의 게임성은 실력 경쟁보다 참여 루프에 더 가깝게 설계돼 있어요.
-              퀴즈를 풀고, 복습하고, 방에 기여하면 뽑기권이 모이고, 그 보상으로 컬렉션과 꾸미기가 열립니다.
-            </p>
-            <div class="hero-actions">
-              <button class="button primary" type="button" data-action="draw-gacha">뽑기하기</button>
-              <a class="button secondary" href="#collection">컬렉션 보기</a>
-            </div>
-            <div class="mini-stack" style="margin-top:18px">
-              <span>참여 우선 보상</span>
-              <span>중복은 파편</span>
-              <span>대표 꼬모 + 프레임</span>
-              <span>학교급 유지</span>
-            </div>
-          </section>
-
-          <section class="auth-card">
-            <p class="eyebrow">연결 상태</p>
-            <h2>지금 세션이 살아있어요.</h2>
-            <p class="subtle" style="margin-top:10px">
-              코드는 안전하게 소비되고, 이후 상태는 백엔드 토큰으로 읽어요.
-            </p>
-            <div class="auth-form">
-              <div class="field">
-                <label>API 주소</label>
-                <input value="${escapeAttribute(state.apiBase)}" data-field="api-base" />
+        <section class="player-hero">
+          <div class="player-identity">
+            <div class="identity-avatar identity-avatar-large">꼬</div>
+            <div class="player-identity-copy">
+              <p class="eyebrow">플레이어 홈</p>
+              <h1>${escapeHtml(me?.nickname || me?.playerName || "꼬모 플레이어")}</h1>
+              <p class="player-handle">${escapeHtml(formatPlayerHandle(me))}</p>
+              <p>
+                참여한 만큼 모이고, 꾸며지고, 남는 구조로 정리한 공식 플레이어 룸입니다.
+                숫자는 짧게, 정체성은 선명하게 보여줍니다.
+              </p>
+              <div class="hero-actions">
+                <button class="button primary" type="button" data-action="draw-gacha">바로 뽑기</button>
+                <a class="button secondary" href="#collection">컬렉션 보기</a>
               </div>
-              <div class="field">
-                <label>세션 만료</label>
-                <input value="${state.sessionExpiresAt ? new Date(state.sessionExpiresAt).toLocaleString("ko-KR") : "미확인"}" readonly />
+            </div>
+          </div>
+
+          <aside class="player-side">
+            <div class="side-card">
+              <div class="side-card-head">
+                <span class="status-pill ${state.token ? "ok" : "warn"}">${state.token ? "세션 있음" : "세션 없음"}</span>
+                <span class="inline-badge">세션 만료 ${state.sessionExpiresAt ? new Date(state.sessionExpiresAt).toLocaleString("ko-KR") : "미확인"}</span>
+              </div>
+              <div class="side-metrics">
+                <span><strong>${numberOrZero(me?.todayTotalScore ?? 0)}</strong> 오늘 총점</span>
+                <span><strong>${collection.length}</strong> 컬렉션</span>
+                <span><strong>${inventory.general}</strong> 일반권</span>
+                <span><strong>${inventory.special}</strong> 특별권</span>
+                <span><strong>${inventory.shards}</strong> 파편</span>
+                <span><strong>${escapeHtml(me?.customization?.representativeFrame ?? "none")}</strong> 프레임</span>
               </div>
               <div class="button-row">
-                <button class="button secondary" type="button" data-action="save-api-base">API 저장</button>
+                <button class="button secondary" type="button" data-action="reload-data">새로고침</button>
                 <button class="button secondary" type="button" data-action="copy-link">플레이어 링크 복사</button>
               </div>
             </div>
-          </section>
+
+            <div class="side-card side-card-soft">
+              <strong>오늘 기록</strong>
+              <p>${escapeHtml(me?.todayRecord ?? "대기")}</p>
+              <div class="mini-stack">
+                <span>학교급 ${escapeHtml(me?.schoolStage ?? "general")}</span>
+                <span>학년 ${escapeHtml(me?.gradeLabel ?? "자동 맞춤")}</span>
+                <span>대표 꼬모 ${escapeHtml(me?.customization?.representativeKkomo ?? "default")}</span>
+              </div>
+            </div>
+          </aside>
         </section>
 
-        <section class="section">
-          <div class="tabbar" role="tablist" aria-label="플레이어 탭">
-            ${renderTabButton("profile", "프로필", "학년, 점수, 오늘 상태")}
-            ${renderTabButton("gacha", "뽑기", "티켓으로 꼬모를 뽑아요")}
-            ${renderTabButton("collection", "컬렉션", "획득한 꼬모를 모아봐요")}
-            ${renderTabButton("customize", "꾸미기", "대표 꼬모와 프레임")}
+        <section class="section section-bleed">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">플레이어 상태판</p>
+              <h2>한 화면에서 프로필, 뽑기, 컬렉션, 꾸미기를 넘깁니다.</h2>
+            </div>
+            <p>탭은 상태를 분리하고, 내용은 한 덩어리로 읽히도록 정리했습니다.</p>
           </div>
 
-          <div class="panel-grid">
-            ${renderProfilePanel()}
-            ${renderGachaPanel()}
-            ${renderCollectionPanel()}
-            ${renderCustomizePanel()}
+          <div class="player-console">
+            <div class="tabbar" role="tablist" aria-label="플레이어 탭">
+              ${renderTabButton("profile", "프로필", "학교급, 점수, 오늘 상태")}
+              ${renderTabButton("gacha", "뽑기", "티켓으로 꼬모를 뽑아요")}
+              ${renderTabButton("collection", "컬렉션", "획득한 꼬모를 모아봐요")}
+              ${renderTabButton("customize", "꾸미기", "대표 꼬모와 프레임")}
+            </div>
+
+            <div class="panel-grid">
+              ${renderProfilePanel()}
+              ${renderGachaPanel()}
+              ${renderCollectionPanel()}
+              ${renderCustomizePanel()}
+            </div>
           </div>
         </section>
 
@@ -798,7 +854,7 @@ function renderPlayerPage() {
 function renderTabButton(id, title, copy) {
   const active = state.activeTab === id;
   return `
-    <button class="tab-button ${active ? "active" : ""}" type="button" data-tab="${id}" aria-pressed="${active}">
+    <button class="tab-button ${active ? "active" : ""}" type="button" data-tab="${id}" aria-pressed="${active}" aria-selected="${active}" role="tab">
       <span class="tab-title">${title}</span>
       <span class="tab-copy">${copy}</span>
     </button>
@@ -817,18 +873,18 @@ function renderProfilePanel() {
           <span class="inline-badge">총점 ${numberOrZero(me?.todayTotalScore ?? 0)}점</span>
         </div>
       </div>
-      <div class="split">
-        <div class="card" style="padding:18px">
-          <strong>${escapeHtml(me?.playerName ?? "꼬모 플레이어")}</strong>
-          <p>${escapeHtml(me?.todayRecord ?? "오늘 기록 없음")}</p>
+      <div class="split split-hero">
+        <div class="card card-surface">
+          <strong>${escapeHtml(formatPlayerIdentity(me))}</strong>
+          <p>${escapeHtml(me?.nickname || me?.playerName || "꼬모 플레이어")} · ${escapeHtml(me?.todayRecord ?? "오늘 기록 없음")}</p>
           <div class="mini-stack">
-            <span>학년 ${escapeHtml(me?.gradeLabel ?? "자동 맞춤")}</span>
+            <span>플레이어 ID ${escapeHtml(formatPlayerHandle(me))}</span>
             <span>총 XP ${numberOrZero(me?.totalXp ?? 0)}</span>
             <span>대표 꼬모 ${escapeHtml(me?.customization?.representativeKkomo ?? "default")}</span>
             <span>프레임 ${escapeHtml(me?.customization?.representativeFrame ?? "none")}</span>
           </div>
         </div>
-        <div class="card" style="padding:18px">
+        <div class="card card-surface">
           <strong>오늘 상태</strong>
           <p>${escapeHtml(me?.summary?.missionStatus ?? "참여 우선")}</p>
           <div class="mini-stack">
@@ -836,7 +892,7 @@ function renderProfilePanel() {
             <span>특별권 ${numberOrZero(me?.tickets?.special ?? 0)}</span>
             <span>파편 ${numberOrZero(me?.tickets?.shards ?? 0)}</span>
           </div>
-          <div class="button-row" style="margin-top:14px">
+          <div class="button-row button-row-tight">
             <button class="button primary" type="button" data-action="draw-gacha">바로 뽑기</button>
             <button class="button secondary" type="button" data-tab="customize">꾸미기 보기</button>
           </div>
@@ -859,21 +915,21 @@ function renderGachaPanel() {
         </div>
       </div>
       <div class="split">
-        <div class="card" style="padding:18px">
+        <div class="card card-surface">
           <strong>뽑기권 종류</strong>
           <p>일반권과 특별권만 먼저 두고, 중복은 파편으로 바꿉니다.</p>
-          <div class="field" style="margin-top:14px">
+          <div class="field field-offset">
             <label for="ticketType">티켓 선택</label>
             <select id="ticketType" name="ticketType">
               <option value="normal">일반 뽑기권</option>
               <option value="special">특별 뽑기권</option>
             </select>
           </div>
-          <div class="button-row" style="margin-top:14px">
+          <div class="button-row button-row-tight">
             <button class="button primary" type="button" data-action="draw-gacha">뽑기 실행</button>
           </div>
         </div>
-        <div class="card" style="padding:18px">
+        <div class="card card-surface">
           <strong>최근 결과</strong>
           ${state.drawResult ? renderDrawSummary(state.drawResult) : `<p>아직 뽑기 결과가 없어요. 먼저 한 번 뽑아보면 결과가 이 자리에 표시돼요.</p>`}
         </div>
@@ -939,26 +995,40 @@ function renderCustomizePanel() {
         </div>
       </div>
       <form class="customize-grid" data-form="customize">
-        <div class="card" style="padding:18px">
+        <div class="card card-surface">
+          <strong>닉네임</strong>
+          <p>웹 프로필에서 보이는 이름이에요. 플레이어 ID는 그대로 유지됩니다.</p>
+          <div class="field field-offset">
+            <label for="nickname">닉네임</label>
+            <input
+              id="nickname"
+              name="nickname"
+              maxlength="20"
+              value="${escapeAttribute(me?.nickname || me?.playerName || "")}"
+              placeholder="닉네임을 입력하세요"
+            />
+          </div>
+        </div>
+        <div class="card card-surface">
           <strong>대표 꼬모</strong>
           <p>보유한 꼬모 중에서 대표를 하나 정할 수 있어요.</p>
-          <div class="field" style="margin-top:14px">
+          <div class="field field-offset">
             <label for="representativeKkomo">선택</label>
             <select id="representativeKkomo" name="representativeKkomo">
               ${ownedChoices || `<option value="default">기본 꼬모</option>`}
             </select>
           </div>
         </div>
-        <div class="card" style="padding:18px">
+        <div class="card card-surface">
           <strong>프레임</strong>
           <p>웹 프로필의 분위기를 프레임으로 조절해요.</p>
-          <div class="field" style="margin-top:14px">
+          <div class="field field-offset">
             <label for="representativeFrame">선택</label>
             <select id="representativeFrame" name="representativeFrame">
               ${ownedFrames}
             </select>
           </div>
-          <div class="button-row" style="margin-top:14px">
+          <div class="button-row button-row-tight">
             <button class="button primary" type="submit" data-action="customize-save">저장하기</button>
           </div>
         </div>
@@ -1007,16 +1077,16 @@ function renderCollectionItem(item) {
 
 function renderDrawResult(drawResult) {
   return `
-    <section class="section">
+    <section class="section draw-result-section">
       <div class="section-head">
         <div>
           <p class="eyebrow">뽑기 결과</p>
           <h2>이번에 새로 얻은 꼬모예요.</h2>
         </div>
       </div>
-      <div class="card" style="padding:18px">
+      <div class="card card-surface draw-result-card">
         ${renderDrawSummary(drawResult)}
-        <div class="button-row" style="margin-top:14px">
+        <div class="button-row button-row-tight">
           <button class="button secondary" type="button" data-tab="collection">컬렉션으로 보기</button>
           <button class="button secondary" type="button" data-action="draw-gacha">한 번 더 뽑기</button>
         </div>
@@ -1086,6 +1156,43 @@ function renderPreviewCard(profile) {
   `;
 }
 
+function renderCollectionTeaserCards() {
+  const cards = [
+    { rarity: "common", title: "잠금 실루엣", copy: "아직 얻지 못한 꼬모는 도감 카드로만 살짝 비춥니다.", symbol: "◌" },
+    { rarity: "rare", title: "대표 카드", copy: "획득한 꼬모는 컬러와 희귀도로 분리해서 보여줍니다.", symbol: "✦" },
+    { rarity: "epic", title: "중복 전환", copy: "중복은 파편으로 흘러가고, 다음 보상 루프를 밀어줍니다.", symbol: "◎" },
+    { rarity: "legendary", title: "공식 도감", copy: "컬렉션은 소장감이 남도록 카드 비중을 크게 가져갑니다.", symbol: "❂" }
+  ];
+  return cards
+    .map(
+      (card) => `
+        <article class="teaser-card rarity-${card.rarity}">
+          <div class="teaser-symbol">${card.symbol}</div>
+          <strong>${card.title}</strong>
+          <p>${card.copy}</p>
+          <span class="rarity ${card.rarity}">${card.rarity}</span>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function formatPlayerHandle(me) {
+  if (!me) {
+    return "player-id pending";
+  }
+  return me.playerHandle || me.playerName || "player-id pending";
+}
+
+function formatPlayerIdentity(me) {
+  if (!me) {
+    return "꼬모 플레이어";
+  }
+  const nickname = me.nickname || me.playerName || "꼬모 플레이어";
+  const handle = formatPlayerHandle(me);
+  return me.playerHandle ? `${nickname} · ${handle}` : nickname;
+}
+
 function formatHumanDate(value) {
   if (!value) {
     return "기록 없음";
@@ -1117,62 +1224,88 @@ function escapeAttribute(value) {
 
 function render() {
   document.title = state.mode === "player" ? "꼬모 · 플레이어" : "꼬모 · 공식 웹 공책";
+  const previousMode = state.__lastRenderedMode;
+  const previousTab = state.__lastRenderedTab;
   app.innerHTML = buildPage();
-  runMotion();
+  runMotion({ previousMode, previousTab });
+  state.__lastRenderedMode = state.mode;
+  state.__lastRenderedTab = state.activeTab;
 }
 
-function runMotion() {
+function runMotion(context = {}) {
   const gsap = window.gsap;
   if (!gsap || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return;
   }
 
-  gsap.fromTo(
-    ".container .topbar",
-    { opacity: 0, y: -12 },
-    { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }
-  );
+  const root = document.querySelector(".page");
+  if (!root) {
+    return;
+  }
 
-  gsap.fromTo(
-    ".container .hero",
-    { opacity: 0, y: 18 },
-    { opacity: 1, y: 0, duration: 0.65, ease: "power3.out", delay: 0.06 }
-  );
+  gsap.killTweensOf(root.querySelectorAll("*"));
 
-  gsap.fromTo(
-    ".container .feature-card, .container .value-card, .container .item-card, .container .reward-item, .container .panel, .container .auth-card",
-    { opacity: 0, y: 18 },
-    {
-      opacity: 1,
-      y: 0,
-      duration: 0.55,
-      ease: "power3.out",
-      stagger: 0.04,
-      delay: 0.08
-    }
+  const topbar = root.querySelector(".topbar");
+  const hero = root.querySelector(".landing-hero, .player-hero");
+  if (topbar) {
+    gsap.fromTo(topbar, { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.42, ease: "power3.out" });
+  }
+  if (hero) {
+    gsap.fromTo(hero, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.72, ease: "power3.out", delay: 0.05 });
+  }
+
+  const staggerTargets = root.querySelectorAll(
+    ".feature-card, .proof-card, .identity-card, .stage-note, .support-item, .preview-stage, .auth-card, .value-card, .panel, .side-card, .teaser-card, .reward-item, .item-card"
   );
+  if (staggerTargets.length) {
+    gsap.fromTo(
+      staggerTargets,
+      { opacity: 0, y: 18 },
+      { opacity: 1, y: 0, duration: 0.52, ease: "power3.out", stagger: 0.04, delay: 0.08 }
+    );
+  }
 
   if (state.mode === "public") {
-    gsap.to(".hero-visual .note.quiz", {
+    gsap.to(root.querySelectorAll(".stage-orbit .preview-tag"), {
       y: -8,
       duration: 2.8,
       repeat: -1,
       yoyo: true,
-      ease: "sine.inOut"
+      ease: "sine.inOut",
+      stagger: 0.12
     });
-    gsap.to(".hero-visual .note.profile", {
-      y: 8,
-      duration: 3.1,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-    gsap.to(".hero-visual .stamp.blue", {
-      rotate: -10,
+    gsap.to(root.querySelectorAll(".identity-avatar, .brand-mark"), {
+      rotate: 3,
       duration: 4.8,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut"
     });
+  }
+
+  if (state.mode === "player") {
+    if (context.previousTab !== state.activeTab) {
+      const panel = root.querySelector(`[data-panel="${state.activeTab}"]`);
+      if (panel) {
+        gsap.fromTo(panel, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.42, ease: "power3.out" });
+      }
+    }
+
+    if (state.drawResult) {
+      gsap.fromTo(
+        root.querySelectorAll(".draw-result-card"),
+        { opacity: 0, scale: 0.96, y: 16 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.4)" }
+      );
+    }
+
+    const collectionCards = root.querySelectorAll(".collection-grid .item-card");
+    if (collectionCards.length) {
+      gsap.fromTo(
+        collectionCards,
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.035, delay: 0.05 }
+      );
+    }
   }
 }

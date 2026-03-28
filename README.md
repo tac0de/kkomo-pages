@@ -1,6 +1,6 @@
 # Kkomo Pages
 
-꼬모 공식 웹사이트용 public GitHub Pages 프런트엔드입니다.
+GitHub Pages용 정적 프런트엔드입니다.
 
 ## 모드
 
@@ -28,6 +28,8 @@
 
 ## 배포
 
-- GitHub Pages 배포는 저장소의 `.github/workflows/deploy-pages.yml` 에서 처리합니다.
-- `main` push 또는 `workflow_dispatch` 시 현재 저장소 루트가 그대로 Pages에 배포됩니다.
-- 기본 API는 현재 dev backend를 가리킵니다. prod 전환 시 `app.js`의 기본 주소를 함께 바꾸면 됩니다.
+- 이 문서는 GitHub Pages 정적 배포 스캐폴딩 기준입니다.
+- GitHub Pages 배포는 저장소의 [.github/workflows/deploy-pages.yml](/Users/wonyoung_choi/projects/kakao-study-groupbot/.github/workflows/deploy-pages.yml) 에서 처리합니다.
+- 현재는 `codex/kkomo-dev-baseline-20260326` 브랜치 push 와 `workflow_dispatch` 에서만 배포됩니다.
+- 배포 대상은 `web/kkomo-pages/` 디렉터리 전체입니다.
+- 브랜치가 dev 전용 명칭으로 바뀌면 workflow의 `push.branches`만 함께 수정하면 됩니다.
