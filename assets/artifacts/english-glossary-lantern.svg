@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">해석의 등잔</title>
+  <desc id="desc">영어 축 유물 일러스트 카드</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff4d6"/>
+      <stop offset="100%" stop-color="#f1c27d"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="28" fill="url(#bg)"/>
+  <rect x="26" y="26" width="204" height="204" rx="24" fill="#fffaf0" opacity="0.82"/>
+  <path d="M128 48c20 0 36 16 36 36v20l18 22c6 7 2 18-7 18H81c-9 0-13-11-7-18l18-22V84c0-20 16-36 36-36Z" fill="#d97706"/>
+  <path d="M104 144h48v22c0 13-10 23-24 23s-24-10-24-23z" fill="#7c2d12"/>
+  <circle cx="128" cy="106" r="24" fill="#fde68a"/>
+  <path d="M121 78h14v56h-14z" fill="#78350f"/>
+  <path d="M84 194c14-10 29-15 44-15s30 5 44 15" fill="none" stroke="#92400e" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -28,8 +28,6 @@ GitHub Pages용 정적 프런트엔드입니다.
 
 ## 배포
 
-- 이 문서는 GitHub Pages 정적 배포 스캐폴딩 기준입니다.
-- GitHub Pages 배포는 저장소의 [.github/workflows/deploy-pages.yml](/Users/wonyoung_choi/projects/kakao-study-groupbot/.github/workflows/deploy-pages.yml) 에서 처리합니다.
-- 현재는 `codex/kkomo-dev-baseline-20260326` 브랜치 push 와 `workflow_dispatch` 에서만 배포됩니다.
-- 배포 대상은 `web/kkomo-pages/` 디렉터리 전체입니다.
-- 브랜치가 dev 전용 명칭으로 바뀌면 workflow의 `push.branches`만 함께 수정하면 됩니다.
+- GitHub Pages 배포는 이 저장소의 [.github/workflows/deploy-pages.yml](./.github/workflows/deploy-pages.yml) 에서 처리합니다.
+- `main` push 와 `workflow_dispatch` 에서만 배포됩니다.
+- 배포 대상은 저장소 루트 전체입니다.

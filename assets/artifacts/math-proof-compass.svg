@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">증명의 나침반</title>
+  <desc id="desc">수학 축 유물 일러스트 카드</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="28" fill="url(#bg)"/>
+  <rect x="26" y="26" width="204" height="204" rx="24" fill="#eff6ff" opacity="0.82"/>
+  <circle cx="128" cy="96" r="28" fill="#1d4ed8"/>
+  <circle cx="128" cy="96" r="12" fill="#dbeafe"/>
+  <path d="M82 194l39-88h14l39 88h-20l-26-58-26 58z" fill="#1e3a8a"/>
+  <path d="M96 154h64" stroke="#93c5fd" stroke-width="12" stroke-linecap="round"/>
+  <path d="M128 60l10 26 26 10-26 10-10 26-10-26-26-10 26-10z" fill="#bfdbfe"/>
+</svg>

@@ -3,18 +3,213 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f8f1e7" />
     <meta
       name="description"
-      content="꼬모 웹 공책. 카카오톡에서 시작한 공부를 웹에서 모으고, 뽑고, 꾸밀 수 있어요."
+      content="꼬모 개인 프로필 열람 페이지. 해당 유저의 프로필 상세, 유저 분석표, 직업과 호칭, 유물 도감, 4기능 메모장 현황을 웹에서 확인합니다."
     />
-    <title>꼬모 · 웹 공책</title>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <title>꼬모 개인 프로필</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="app" class="app-shell" aria-live="polite"></div>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">꼬모 개인 프로필</p>
+          <h1>해당 유저의 학습 프로필과 기록만 웹에서 열람합니다.</h1>
+          <p class="hero-body">
+            이 페이지는 해당 유저의 프로필 열람 전용입니다. 프로필 상세, 유저 분석표, 현재 직업과 호칭, 대표 유물과 유물 도감,
+            그리고 영단어·수학공식·과학공식·사자성어 메모장 현황을 한 화면에서 정리합니다.
+          </p>
+          <ul class="hero-points">
+            <li>대상 유저 1명의 학습 기록만 보여줍니다.</li>
+            <li>직업과 호칭은 개인 성장 정체성으로 읽힙니다.</li>
+            <li>유물과 메모장은 누적 학습 흔적으로 표시됩니다.</li>
+          </ul>
+        </div>
+        <aside class="hero-panel">
+          <div class="status-chip" data-field="status-chip">도전의 탑 v1</div>
+          <div class="profile-card">
+            <span>프로필 상세</span>
+            <strong data-field="hero-job">Lv.6 방정식 기사</strong>
+            <p data-field="hero-summary">대표 호칭 공식 보관자 · 유물 2종 해금 · 오늘 7문제 정답</p>
+          </div>
+          <div class="analysis-card">
+            <span>유저 분석표</span>
+            <strong data-field="hero-analysis">수학 48XP · 과학 20XP · 영어 12XP · 국어 10XP</strong>
+            <p data-field="hero-analysis-description">주력 과목과 메모장 저장 패턴을 같이 보여줍니다.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="flow-section">
+        <div class="section-head">
+          <p class="eyebrow">열람 기준</p>
+          <h2>이 페이지는 진입 안내가 아니라 개인 기록 열람판입니다.</h2>
+        </div>
+        <div class="flow-grid">
+          <article class="flow-card is-active" data-flow-panel="profile">
+            <span>Profile View</span>
+            <h3>프로필 상세</h3>
+            <p>레벨, 경험치, 현재 직업, 대표 호칭, 오늘 기록을 이 유저 기준으로만 표시합니다.</p>
+            <ol>
+              <li>유저 분석표</li>
+              <li>직업 · 호칭</li>
+              <li>탑 진행과 유물</li>
+            </ol>
+          </article>
+          <article class="flow-card" data-flow-panel="memo">
+            <span>Memo View</span>
+            <h3>4기능 메모장 현황</h3>
+            <p>영단어, 수학공식, 과학공식, 사자성어 저장 수를 이 유저 기준으로만 보여줍니다.</p>
+            <ol>
+              <li>영단어 메모장</li>
+              <li>수학공식 메모장</li>
+              <li>과학공식 · 사자성어 메모장</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <section class="hub-grid">
+        <article class="hub-card" id="profile">
+          <p class="eyebrow">Profile</p>
+          <h2>프로필 상세</h2>
+          <p data-field="profile-detail">레벨, 경험치, 현재 직업, 대표 호칭, 오늘 기록을 한 번에 보여줍니다.</p>
+        </article>
+        <article class="hub-card">
+          <p class="eyebrow">Analysis</p>
+          <h2>유저 분석표</h2>
+          <p data-field="analysis-detail">과목별 XP를 한 줄로 정리해 지금 무엇을 밀고 있는지 바로 읽히게 만듭니다.</p>
+        </article>
+        <article class="hub-card">
+          <p class="eyebrow">Identity</p>
+          <h2>직업 · 호칭</h2>
+          <p data-field="identity-detail">직업은 학습 빌드, 호칭은 누적 업적입니다. 둘을 분리해서 보여줍니다.</p>
+        </article>
+        <article class="hub-card" id="memo">
+          <p class="eyebrow">Memo</p>
+          <h2>4기능 메모장</h2>
+          <p data-field="memo-detail">영단어, 수학공식, 과학공식, 사자성어 저장 수를 랜딩에서 바로 확인합니다.</p>
+        </article>
+      </section>
+
+      <section class="tower-section" id="artifacts">
+        <div class="section-head">
+          <p class="eyebrow">Tower</p>
+          <h2>도전의 탑과 유물 도감</h2>
+          <p data-field="tower-detail">유물은 오직 도전의 탑에서, 그리고 2인 이상이 실제 참여한 방에서만 획득됩니다.</p>
+        </div>
+        <div class="tower-summary">
+          <div>
+            <span>현재 층</span>
+            <strong data-field="tower-name">기억 회랑 3층</strong>
+          </div>
+          <div>
+            <span>진행도</span>
+            <strong data-countup="78" data-field="tower-progress">78 / 120</strong>
+          </div>
+          <div>
+            <span>방 참여</span>
+            <strong data-countup="3" data-field="tower-participants">3명</strong>
+          </div>
+        </div>
+        <div class="artifact-grid">
+          
+        <article class="artifact-card">
+          <img src="./assets/artifacts/english-glossary-lantern.svg" alt="해석의 등잔" loading="lazy" />
+          <div class="artifact-copy">
+            <p class="artifact-subject">영어 유물</p>
+            <h3>해석의 등잔</h3>
+            <p>영어 개념과 어휘 공략을 밝히는 등잔이에요.</p>
+            <span>2명 이상 방에서 영어 축 도전의 탑 등반 기여 시 해금</span>
+          </div>
+        </article>
+
+        <article class="artifact-card">
+          <img src="./assets/artifacts/math-proof-compass.svg" alt="증명의 나침반" loading="lazy" />
+          <div class="artifact-copy">
+            <p class="artifact-subject">수학 유물</p>
+            <h3>증명의 나침반</h3>
+            <p>식과 풀이의 방향을 정리해 주는 나침반이에요.</p>
+            <span>2명 이상 방에서 수학 축 도전의 탑 등반 기여 시 해금</span>
+          </div>
+        </article>
+
+        <article class="artifact-card">
+          <img src="./assets/artifacts/science-observer-orb.svg" alt="관측의 구체" loading="lazy" />
+          <div class="artifact-copy">
+            <p class="artifact-subject">과학 유물</p>
+            <h3>관측의 구체</h3>
+            <p>관찰 기록을 모아 탑 공략을 돕는 구체예요.</p>
+            <span>2명 이상 방에서 과학 축 도전의 탑 등반 기여 시 해금</span>
+          </div>
+        </article>
+
+        <article class="artifact-card">
+          <img src="./assets/artifacts/korean-archive-seal.svg" alt="문해의 인장" loading="lazy" />
+          <div class="artifact-copy">
+            <p class="artifact-subject">국어 유물</p>
+            <h3>문해의 인장</h3>
+            <p>읽기와 표현의 흐름을 남기는 인장이에요.</p>
+            <span>2명 이상 방에서 국어 축 도전의 탑 등반 기여 시 해금</span>
+          </div>
+        </article>
+        </div>
+      </section>
+
+      <section class="share-section">
+        <div class="section-head">
+          <p class="eyebrow">Share Card</p>
+          <h2>탑 등반 카드</h2>
+          <p>직업, 호칭, 유물, 탑 진행도를 묶어 한 장의 대표 카드로 보여줍니다.</p>
+        </div>
+        <article class="share-card">
+          <div class="share-copy">
+            <span>대표 성과</span>
+            <strong data-field="share-title">방정식 기사 · 공식 보관자</strong>
+            <p data-field="share-subtitle">기억 회랑 3층 · 78/120 · 3명 참여</p>
+            <small data-field="share-body">2종 해금 · 증명의 나침반, 해석의 등잔</small>
+          </div>
+          <div class="share-actions">
+            <a class="share-link" href="#profile" data-share-anchor="profile">프로필로 이동</a>
+            <a class="share-link" href="#memo" data-share-anchor="memo">메모장으로 이동</a>
+            <a class="share-link" href="#artifacts" data-share-anchor="artifacts">유물 도감으로 이동</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="memo-section">
+        <div class="section-head">
+          <p class="eyebrow">Memo Loop</p>
+          <h2>이 유저의 4기능 메모장 현황</h2>
+        </div>
+        <div class="memo-grid">
+          <article class="memo-card">
+            <strong>영단어 메모장</strong>
+            <p>개념 질문 후 어휘 저장, 다시 랜딩으로 복귀</p>
+          </article>
+          <article class="memo-card">
+            <strong>수학공식 메모장</strong>
+            <p>풀이 흐름을 저장하고 직업 성장과 연결</p>
+          </article>
+          <article class="memo-card">
+            <strong>과학공식 메모장</strong>
+            <p>관찰 포인트를 정리하고 공략 기록으로 이어짐</p>
+          </article>
+          <article class="memo-card">
+            <strong>사자성어 메모장</strong>
+            <p>문해 축 저장과 국어 유물 해금 흐름을 묶음</p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <script>window.__KKOMO_PAGES__ = { marker: "generated-by:kakao-study-groupbot/scripts/pages/render-kkomo-pages.ts" };</script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

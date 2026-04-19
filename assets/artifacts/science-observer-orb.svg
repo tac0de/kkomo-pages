@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">관측의 구체</title>
+  <desc id="desc">과학 축 유물 일러스트 카드</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="28" fill="url(#bg)"/>
+  <rect x="26" y="26" width="204" height="204" rx="24" fill="#ecfdf5" opacity="0.82"/>
+  <circle cx="128" cy="112" r="44" fill="#0f766e"/>
+  <circle cx="128" cy="112" r="28" fill="#99f6e4"/>
+  <circle cx="142" cy="96" r="10" fill="#ffffff" opacity="0.85"/>
+  <path d="M84 178c12-9 27-14 44-14s32 5 44 14" fill="none" stroke="#065f46" stroke-width="12" stroke-linecap="round"/>
+  <path d="M98 186v18M128 180v24M158 186v18" stroke="#065f46" stroke-width="10" stroke-linecap="round"/>
+</svg>
