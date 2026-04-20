@@ -181,19 +181,19 @@ function IntroShell() {
       <section className="intro-hero">
         <div className="intro-hero-copy">
           <p className="micro-label">KKOMO PROFILE READER</p>
-          <h1>꼬모는 공부 결과를 예쁜 소개 카드가 아니라 한 사람의 학습 기록 원장으로 남긴다.</h1>
+          <h1>이 페이지는 꼬모 소개 랜딩이 아니라 유저 기록판이 열리기 전 대기실이다.</h1>
           <p className="lead">
-            지금은 유효한 프로필 컨텍스트가 없어서 대기실 모드로 열렸다. 올바른 링크로 들어오면 이 페이지는 소개를 멈추고 곧바로 해당 유저의 기록판으로 바뀐다.
+            유효한 프로필 컨텍스트가 없으면 서비스 홍보 대신 열람 규칙만 남긴다. 올바른 링크로 들어오면 이 화면은 사라지고 곧바로 해당 유저의 프로필 원장만 표시한다.
           </p>
         </div>
         <div className="intro-side-index">
-          <span>OPEN SEQUENCE</span>
+          <span>READ ORDER</span>
           <ol>
             <li>프로필 상세</li>
             <li>유저 분석표</li>
             <li>직업 · 호칭</li>
             <li>4기능 메모장</li>
-            <li>협동 기록</li>
+            <li>협동 기록 보조</li>
           </ol>
         </div>
       </section>
@@ -201,7 +201,7 @@ function IntroShell() {
       <section className="intro-deck">
         <article className="deck-panel deck-panel-wide">
           <p className="micro-label">RECORD INDEX</p>
-          <h2>꼬모가 기록하는 것</h2>
+          <h2>꼬모는 기능을 소개하지 않고 기록 항목을 남긴다.</h2>
           <div className="index-grid">
             <div>
               <span>PROFILE</span>
@@ -224,14 +224,14 @@ function IntroShell() {
 
         <article className="deck-panel">
           <p className="micro-label">ENTRY RULE</p>
-          <h2>이 화면은 서비스 소개보다 프로필 열람의 입구에 가깝다.</h2>
-          <p>프로필 버튼이나 메모장 저장 이후 링크로 들어오면 실제 유저 기록만 보여준다. 샘플 유저 카드로 분위기만 꾸미는 방식은 쓰지 않는다.</p>
+          <h2>샘플 유저나 데모 카드로 분위기만 꾸미지 않는다.</h2>
+          <p>프로필 버튼이나 메모장 저장 이후 링크로 들어왔을 때만 실제 유저 기록이 열린다. 링크가 없으면 대기실 상태를 유지한다.</p>
         </article>
 
         <article className="deck-panel deck-panel-accent">
-          <p className="micro-label">READING ORDER</p>
-          <h2>프로필과 메모가 전면, 탑과 유물은 뒤쪽 기록.</h2>
-          <p>도전의 탑과 유물은 메인 광고가 아니라, 이미 쌓인 개인 기록 뒤에서 따라오는 협동 흔적으로 배치한다.</p>
+          <p className="micro-label">LAYOUT RULE</p>
+          <h2>프로필과 메모가 전면, 탑과 유물은 뒤쪽 아카이브.</h2>
+          <p>도전의 탑과 유물은 메인 광고가 아니다. 이미 쌓인 개인 기록 뒤에서 읽히는 협동 흔적으로만 둔다.</p>
         </article>
       </section>
     </main>
@@ -243,8 +243,8 @@ function LoadingShell() {
     <main className="page state-page">
       <section className="state-shell">
         <p className="micro-label">LOADING</p>
-        <h2>프로필 기록판을 불러오는 중입니다.</h2>
-        <p>프로필 상세, 분석표, 메모장 현황, 협동 기록을 조합하고 있습니다.</p>
+        <h2>유저 기록판을 조합하는 중입니다.</h2>
+        <p>프로필 상세, 분석표, 메모장 현황, 협동 기록을 순서대로 읽어오고 있습니다.</p>
       </section>
     </main>
   );
@@ -282,9 +282,9 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
       <section className="ledger-head">
         <div className="ledger-title">
           <p className="micro-label">PROFILE DOSSIER</p>
-          <h1>{profile.stageLabel || "학습 프로필"} 기준으로 정리된 이 유저의 기록 원장</h1>
+          <h1>{profile.stageLabel || "학습 프로필"} 기준으로 정리된 이 유저의 학습 원장</h1>
           <p className="lead">
-            {snapshot.followupDescription || "프로필 상세와 분석표, 메모장을 먼저 읽고 협동 기록은 뒤에서 확인합니다."}
+            {snapshot.followupDescription || "프로필과 분석표, 메모장을 먼저 읽고 협동 기록은 뒤에서 확인합니다."}
           </p>
         </div>
         <div className="ledger-status">
@@ -358,7 +358,7 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
               <p className="micro-label">MEMO WORKSPACE</p>
               <h2>4기능 메모장</h2>
             </div>
-            <p className="section-note">기억해야 할 항목은 메모장 쪽에 남고, 프로필은 그 누적 결과를 읽는 쪽에 가깝다.</p>
+            <p className="section-note">저장 행위는 메모장에 남고, 프로필은 그 누적 결과를 읽는 쪽에 가깝다.</p>
           </div>
           <div className="memo-shelf">
             <article>
@@ -385,8 +385,8 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
         </article>
 
         <article className="paper-sheet paper-sheet-side">
-          <p className="micro-label">RECENT NOTE</p>
-          <h2>최근 활동</h2>
+          <p className="micro-label">RECENT TRACE</p>
+          <h2>최근 흔적</h2>
           <p>{profile.todaySummary || artifacts.summary || "아직 오늘 기록이 없습니다. 메모장 저장과 문제 풀이가 쌓이면 여기에 요약됩니다."}</p>
         </article>
       </section>
@@ -395,10 +395,10 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
         <article className="paper-sheet paper-sheet-archive">
           <div className="section-head">
             <div>
-              <p className="micro-label">CO-OP ARCHIVE</p>
+              <p className="micro-label">CO-OP TRACE</p>
               <h2>도전의 탑 요약</h2>
             </div>
-            <p className="section-note">{tower?.hint || "도전의 탑 기록이 있으면 이 유저가 남긴 협동 흔적을 여기서 읽는다."}</p>
+            <p className="section-note">{tower?.hint || "탑 기록이 있으면 이 유저가 남긴 협동 흔적을 여기서 읽는다."}</p>
           </div>
           <div className="archive-strip">
             <div>
@@ -417,10 +417,10 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
         </article>
 
         <article className="paper-sheet paper-sheet-share">
-          <p className="micro-label">PROFILE CARD</p>
+          <p className="micro-label">ANCHOR CARD</p>
           <h2>{shareCard.title || `${profile.jobLabel || "학습자"} · ${profile.equippedTitle || "대표 호칭 없음"}`}</h2>
-          <p>{shareCard.subtitle || "profile snapshot"}</p>
-          <small>{shareCard.body || artifacts.summary || "유물과 메모장이 아직 비어 있습니다."}</small>
+          <p>{shareCard.subtitle || "profile reader anchor"}</p>
+          <small>{shareCard.body || artifacts.summary || "메모장과 유물 기록이 쌓이면 이 카드도 같이 바뀝니다."}</small>
           <div className="share-links">
             <a href={shareCard.profileAnchorUrl || "#profile"}>프로필</a>
             <a href={shareCard.memoAnchorUrl || "#memo"}>메모장</a>
@@ -435,7 +435,7 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
             <p className="micro-label">ARTIFACT ARCHIVE</p>
             <h2>유물 도감</h2>
           </div>
-          <p>{artifacts.summary || "유물은 이 유저의 협동 기록 보조 지표다. 프로필 전면이 아니라 뒤쪽 아카이브에 배치한다."}</p>
+          <p>{artifacts.summary || "유물은 이 유저의 협동 기록 보조 지표다. 프로필 전면이 아니라 뒤쪽 아카이브에 둔다."}</p>
         </div>
         <div className="artifact-wall">
           {artifactCards.map((artifact) => (
