@@ -203,6 +203,24 @@ function IntroShell() {
         </div>
       </section>
 
+      <section className="waiting-ledger">
+        <article className="ledger-strip">
+          <span>INTRO MODE</span>
+          <strong>프로필 링크 없음</strong>
+          <p>가짜 유저 카드 없이 열람 규칙만 남긴다.</p>
+        </article>
+        <article className="ledger-strip">
+          <span>PROFILE MODE</span>
+          <strong>실제 유저 컨텍스트 감지</strong>
+          <p>프로필 상세와 메모 기록을 먼저 펼친다.</p>
+        </article>
+        <article className="ledger-strip">
+          <span>INVALID MODE</span>
+          <strong>열람 실패</strong>
+          <p>프로필 대신 대기실로 되돌리고 링크 이상만 알린다.</p>
+        </article>
+      </section>
+
       <section className="protocol-grid">
         <article className="protocol-sheet protocol-sheet-major">
           <p className="eyebrow">READ ORDER</p>
@@ -279,6 +297,7 @@ function InvalidShell({ reason }: { reason: string }) {
         <p className="eyebrow">INVALID LINK</p>
         <h2>열람 가능한 프로필 정보를 불러오지 못했습니다.</h2>
         <p>{reason}</p>
+        <p>이 화면은 유저 프로필 열람 전용이다. 링크가 유효하지 않으면 소개 모드만 남는다.</p>
         <a className="action-chip" href={import.meta.env.BASE_URL}>
           소개 모드로 돌아가기
         </a>
@@ -298,6 +317,7 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
     () => (artifacts.catalog && artifacts.catalog.length > 0 ? artifacts.catalog : FALLBACK_ARTIFACTS),
     [artifacts.catalog]
   );
+  const maxAnalysisXp = Math.max(...analysis.map((entry) => entry.xp), 1);
 
   return (
     <main className="reader-page reader-page-profile">
@@ -321,11 +341,26 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
       </section>
 
       <nav className="reader-nav">
-        <a href="#profile">Profile</a>
-        <a href="#analysis">Analysis</a>
-        <a href="#memo">Memo</a>
-        <a href="#archive">Archive</a>
+        <a href="#profile">01 Profile</a>
+        <a href="#analysis">02 Analysis</a>
+        <a href="#memo">03 Memo</a>
+        <a href="#archive">04 Archive</a>
       </nav>
+
+      <section className="reader-manifest">
+        <div>
+          <span>OPEN ORDER</span>
+          <strong>프로필 → 분석 → 메모 → 협동 기록</strong>
+        </div>
+        <div>
+          <span>READER RULE</span>
+          <strong>전면은 개인 기록, 후면은 협동 흔적</strong>
+        </div>
+        <div>
+          <span>PROFILE STATE</span>
+          <strong>{snapshot.hasConversationContext ? "프로필 + 방 컨텍스트" : "프로필 단독 열람"}</strong>
+        </div>
+      </section>
 
       <section className="reader-grid" id="profile">
         <article className="sheet sheet-identity">
@@ -371,7 +406,15 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
           <div className="analysis-ribbon">
             {(analysis.length > 0 ? analysis : [{ subject: "기록 없음", xp: 0 }]).map((entry, index) => (
               <div className="analysis-row" key={`${entry.subject}-${index}`}>
-                <span>{entry.subject}</span>
+                <div className="analysis-copy">
+                  <span>{entry.subject}</span>
+                  <div className="analysis-bar-track">
+                    <div
+                      className="analysis-bar-fill"
+                      style={{ width: `${Math.max(10, Math.round((entry.xp / maxAnalysisXp) * 100))}%` }}
+                    />
+                  </div>
+                </div>
                 <strong>{`${entry.xp} XP`}</strong>
               </div>
             ))}
