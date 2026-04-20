@@ -177,62 +177,84 @@ function useLandingState(): LandingState {
 
 function IntroShell() {
   return (
-    <main className="page mode-intro">
-      <section className="intro-hero">
-        <div className="intro-hero-copy">
-          <p className="micro-label">KKOMO PROFILE READER</p>
-          <h1>이 페이지는 꼬모 소개 랜딩이 아니라 유저 기록판이 열리기 전 대기실이다.</h1>
-          <p className="lead">
-            유효한 프로필 컨텍스트가 없으면 서비스 홍보 대신 열람 규칙만 남긴다. 올바른 링크로 들어오면 이 화면은 사라지고 곧바로 해당 유저의 프로필 원장만 표시한다.
+    <main className="reader-page reader-page-intro">
+      <section className="waiting-room">
+        <div className="waiting-room-head">
+          <p className="eyebrow">KKOMO PROFILE READER</p>
+          <h1>이 화면은 랜딩이 아니라 유저 기록판이 열리기 전 검문소다.</h1>
+          <p className="intro-copy">
+            꼬모는 데모 프로필로 분위기를 만들지 않는다. 유효한 링크가 없으면 서비스 홍보 대신 열람 규칙과 기록 항목만 보여주고, 실제 프로필이 들어오면 즉시 해당 유저 원장으로 전환한다.
           </p>
         </div>
-        <div className="intro-side-index">
-          <span>READ ORDER</span>
-          <ol>
-            <li>프로필 상세</li>
-            <li>유저 분석표</li>
-            <li>직업 · 호칭</li>
-            <li>4기능 메모장</li>
-            <li>협동 기록 보조</li>
-          </ol>
+
+        <div className="waiting-room-rail">
+          <div className="rail-block">
+            <span>ENTRY</span>
+            <strong>프로필 버튼 또는 메모 저장 후 진입</strong>
+          </div>
+          <div className="rail-block">
+            <span>DEFAULT</span>
+            <strong>소개 모드 유지</strong>
+          </div>
+          <div className="rail-block">
+            <span>UNLOCK</span>
+            <strong>실제 유저 컨텍스트</strong>
+          </div>
         </div>
       </section>
 
-      <section className="intro-deck">
-        <article className="deck-panel deck-panel-wide">
-          <p className="micro-label">RECORD INDEX</p>
-          <h2>꼬모는 기능을 소개하지 않고 기록 항목을 남긴다.</h2>
-          <div className="index-grid">
+      <section className="protocol-grid">
+        <article className="protocol-sheet protocol-sheet-major">
+          <p className="eyebrow">READ ORDER</p>
+          <div className="protocol-sequence">
             <div>
-              <span>PROFILE</span>
-              <strong>레벨 · 경험치 · 대표 호칭</strong>
+              <span>01</span>
+              <strong>프로필 상세</strong>
             </div>
             <div>
-              <span>ANALYSIS</span>
-              <strong>과목별 XP와 주력 축</strong>
+              <span>02</span>
+              <strong>유저 분석표</strong>
             </div>
             <div>
-              <span>MEMO</span>
-              <strong>영단어 · 수학공식 · 과학공식 · 사자성어</strong>
+              <span>03</span>
+              <strong>직업 · 호칭</strong>
             </div>
             <div>
-              <span>CO-OP RECORD</span>
-              <strong>탑 진행과 유물 도감</strong>
+              <span>04</span>
+              <strong>4기능 메모장</strong>
+            </div>
+            <div>
+              <span>05</span>
+              <strong>협동 기록 아카이브</strong>
             </div>
           </div>
         </article>
 
-        <article className="deck-panel">
-          <p className="micro-label">ENTRY RULE</p>
-          <h2>샘플 유저나 데모 카드로 분위기만 꾸미지 않는다.</h2>
-          <p>프로필 버튼이나 메모장 저장 이후 링크로 들어왔을 때만 실제 유저 기록이 열린다. 링크가 없으면 대기실 상태를 유지한다.</p>
+        <article className="protocol-sheet">
+          <p className="eyebrow">NO FAKE DATA</p>
+          <h2>샘플 유저 카드, 가짜 랭킹, 허상 유물 전시는 금지.</h2>
+          <p>프로필이 없으면 열람 규칙만 남긴다. 랜딩이 아니라 리더 대기실이다.</p>
         </article>
 
-        <article className="deck-panel deck-panel-accent">
-          <p className="micro-label">LAYOUT RULE</p>
-          <h2>프로필과 메모가 전면, 탑과 유물은 뒤쪽 아카이브.</h2>
-          <p>도전의 탑과 유물은 메인 광고가 아니다. 이미 쌓인 개인 기록 뒤에서 읽히는 협동 흔적으로만 둔다.</p>
+        <article className="protocol-sheet protocol-sheet-accent">
+          <p className="eyebrow">READER STRUCTURE</p>
+          <h2>프로필과 메모가 전면, 탑과 유물은 뒷장 아카이브.</h2>
+          <p>협동 기록은 존재하지만 광고판이 아니다. 이미 쌓인 학습 이력 뒤에서 읽힌다.</p>
         </article>
+      </section>
+
+      <section className="index-wall">
+        {[
+          ["PROFILE", "레벨 · XP · 대표 호칭"],
+          ["ANALYSIS", "과목별 누적 흐름과 주력 축"],
+          ["MEMO", "영단어 · 수학공식 · 과학공식 · 사자성어"],
+          ["ARCHIVE", "도전의 탑 흔적과 유물 도감"]
+        ].map(([label, value]) => (
+          <article className="index-slab" key={label}>
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </article>
+        ))}
       </section>
     </main>
   );
@@ -240,11 +262,11 @@ function IntroShell() {
 
 function LoadingShell() {
   return (
-    <main className="page state-page">
+    <main className="reader-page state-page">
       <section className="state-shell">
-        <p className="micro-label">LOADING</p>
-        <h2>유저 기록판을 조합하는 중입니다.</h2>
-        <p>프로필 상세, 분석표, 메모장 현황, 협동 기록을 순서대로 읽어오고 있습니다.</p>
+        <p className="eyebrow">LOADING</p>
+        <h2>유저 기록판을 조립하는 중입니다.</h2>
+        <p>프로필 상세, 분석표, 메모장, 협동 기록을 순서대로 정렬하고 있습니다.</p>
       </section>
     </main>
   );
@@ -252,12 +274,12 @@ function LoadingShell() {
 
 function InvalidShell({ reason }: { reason: string }) {
   return (
-    <main className="page state-page">
+    <main className="reader-page state-page">
       <section className="state-shell">
-        <p className="micro-label">INVALID LINK</p>
+        <p className="eyebrow">INVALID LINK</p>
         <h2>열람 가능한 프로필 정보를 불러오지 못했습니다.</h2>
         <p>{reason}</p>
-        <a className="plain-link" href={import.meta.env.BASE_URL}>
+        <a className="action-chip" href={import.meta.env.BASE_URL}>
           소개 모드로 돌아가기
         </a>
       </section>
@@ -278,46 +300,47 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
   );
 
   return (
-    <main className="page mode-profile">
-      <section className="ledger-head">
-        <div className="ledger-title">
-          <p className="micro-label">PROFILE DOSSIER</p>
-          <h1>{profile.stageLabel || "학습 프로필"} 기준으로 정리된 이 유저의 학습 원장</h1>
-          <p className="lead">
-            {snapshot.followupDescription || "프로필과 분석표, 메모장을 먼저 읽고 협동 기록은 뒤에서 확인합니다."}
+    <main className="reader-page reader-page-profile">
+      <section className="reader-head">
+        <div className="reader-head-copy">
+          <p className="eyebrow">PROFILE DOSSIER</p>
+          <h1>{profile.stageLabel || "학습 프로필"} 기준으로 정리된 이 유저의 기록 원장</h1>
+          <p className="intro-copy">
+            {snapshot.followupDescription || "프로필과 분석표를 먼저 읽고, 메모 기록과 협동 흔적을 뒤에서 확인합니다."}
           </p>
         </div>
-        <div className="ledger-status">
-          <div className="status-chip">{snapshot.hasConversationContext ? "profile + tower" : "profile only"}</div>
-          <div className="status-sheet">
-            <span>현재 표지</span>
+
+        <div className="reader-head-status">
+          <div className="status-flag">{snapshot.hasConversationContext ? "profile + co-op" : "profile only"}</div>
+          <div className="status-card">
+            <span>대표 표지</span>
             <strong>{`Lv.${profile.level || 1} ${profile.jobLabel || "학습자"}`}</strong>
-            <p>{`${profile.equippedTitle || "대표 호칭 없음"} · ${artifacts.summary || "유물 도감 비어 있음"}`}</p>
+            <p>{`${profile.equippedTitle || "대표 호칭 없음"} · ${artifacts.summary || "유물 기록 없음"}`}</p>
           </div>
         </div>
       </section>
 
-      <nav className="rail-nav">
+      <nav className="reader-nav">
         <a href="#profile">Profile</a>
         <a href="#analysis">Analysis</a>
         <a href="#memo">Memo</a>
         <a href="#archive">Archive</a>
       </nav>
 
-      <section className="profile-stage" id="profile">
-        <article className="paper-sheet paper-sheet-primary">
-          <p className="micro-label">PROFILE DETAIL</p>
-          <div className="identity-head">
+      <section className="reader-grid" id="profile">
+        <article className="sheet sheet-identity">
+          <p className="eyebrow">PROFILE DETAIL</p>
+          <div className="identity-stack">
             <div>
               <h2>{profile.jobLabel || "학습자"}</h2>
-              <p>{profile.jobTierLabel || "초기 단계"} · {profile.equippedTitle || "대표 호칭 없음"}</p>
+              <p>{`${profile.jobTierLabel || "초기 단계"} · ${profile.equippedTitle || "대표 호칭 없음"}`}</p>
             </div>
-            <div className="identity-badge">
-              <span>오늘 기록</span>
+            <div className="today-chip">
+              <span>TODAY</span>
               <strong>{profile.todaySummary || "기록 대기 중"}</strong>
             </div>
           </div>
-          <div className="stat-grid">
+          <div className="stat-columns">
             <div>
               <span>학습 단계</span>
               <strong>{profile.stageLabel || "자동 맞춤"}</strong>
@@ -337,70 +360,65 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
           </div>
         </article>
 
-        <article className="paper-sheet paper-sheet-log" id="analysis">
-          <p className="micro-label">ANALYSIS LOG</p>
-          <h2>과목별 누적 흐름</h2>
-          <div className="analysis-log">
+        <article className="sheet sheet-analysis" id="analysis">
+          <div className="sheet-head">
+            <div>
+              <p className="eyebrow">ANALYSIS LOG</p>
+              <h2>과목별 누적 흐름</h2>
+            </div>
+            <p>이 유저가 어느 축에 시간을 썼는지 XP 분포로 읽는다.</p>
+          </div>
+          <div className="analysis-ribbon">
             {(analysis.length > 0 ? analysis : [{ subject: "기록 없음", xp: 0 }]).map((entry, index) => (
-              <div className="analysis-line" key={`${entry.subject}-${index}`}>
+              <div className="analysis-row" key={`${entry.subject}-${index}`}>
                 <span>{entry.subject}</span>
                 <strong>{`${entry.xp} XP`}</strong>
               </div>
             ))}
           </div>
         </article>
-      </section>
 
-      <section className="memo-stage" id="memo">
-        <article className="paper-sheet paper-sheet-memo">
-          <div className="section-head">
-            <div>
-              <p className="micro-label">MEMO WORKSPACE</p>
-              <h2>4기능 메모장</h2>
-            </div>
-            <p className="section-note">저장 행위는 메모장에 남고, 프로필은 그 누적 결과를 읽는 쪽에 가깝다.</p>
-          </div>
-          <div className="memo-shelf">
-            <article>
-              <span>영단어</span>
-              <strong>{`${memo.vocab || 0}개`}</strong>
-              <p>어휘와 표현 기록</p>
-            </article>
-            <article>
-              <span>수학공식</span>
-              <strong>{`${memo.formula || 0}개`}</strong>
-              <p>풀이와 공식 기록</p>
-            </article>
-            <article>
-              <span>과학공식</span>
-              <strong>{`${memo.science || 0}개`}</strong>
-              <p>원리와 실험 기록</p>
-            </article>
-            <article>
-              <span>사자성어</span>
-              <strong>{`${memo.saja || 0}개`}</strong>
-              <p>문해와 표현 기록</p>
-            </article>
-          </div>
-        </article>
-
-        <article className="paper-sheet paper-sheet-side">
-          <p className="micro-label">RECENT TRACE</p>
+        <aside className="sheet sheet-aside">
+          <p className="eyebrow">TRACE NOTE</p>
           <h2>최근 흔적</h2>
-          <p>{profile.todaySummary || artifacts.summary || "아직 오늘 기록이 없습니다. 메모장 저장과 문제 풀이가 쌓이면 여기에 요약됩니다."}</p>
-        </article>
+          <p>{profile.todaySummary || artifacts.summary || "아직 오늘 기록이 없습니다. 메모장 저장과 문제 풀이가 쌓이면 여기가 먼저 갱신됩니다."}</p>
+        </aside>
       </section>
 
-      <section className="archive-stage" id="archive">
-        <article className="paper-sheet paper-sheet-archive">
-          <div className="section-head">
+      <section className="memo-dock" id="memo">
+        <div className="dock-head">
+          <div>
+            <p className="eyebrow">MEMO WORKSPACE</p>
+            <h2>4기능 메모장</h2>
+          </div>
+          <p>저장 행위는 메모장에 남고, 프로필은 그 누적 결과를 읽는다.</p>
+        </div>
+        <div className="memo-grid">
+          {[
+            ["영단어", `${memo.vocab || 0}개`, "어휘와 표현 기록"],
+            ["수학공식", `${memo.formula || 0}개`, "풀이와 공식 기록"],
+            ["과학공식", `${memo.science || 0}개`, "원리와 실험 기록"],
+            ["사자성어", `${memo.saja || 0}개`, "문해와 표현 기록"]
+          ].map(([label, value, copy]) => (
+            <article className="memo-card" key={label}>
+              <span>{label}</span>
+              <strong>{value}</strong>
+              <p>{copy}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="archive-grid" id="archive">
+        <article className="sheet sheet-tower">
+          <div className="sheet-head">
             <div>
-              <p className="micro-label">CO-OP TRACE</p>
+              <p className="eyebrow">CO-OP TRACE</p>
               <h2>도전의 탑 요약</h2>
             </div>
-            <p className="section-note">{tower?.hint || "탑 기록이 있으면 이 유저가 남긴 협동 흔적을 여기서 읽는다."}</p>
+            <p>{tower?.hint || "협동 기록이 있을 때만 이 구간이 살아난다."}</p>
           </div>
-          <div className="archive-strip">
+          <div className="tower-grid">
             <div>
               <span>현재 구간</span>
               <strong>{tower?.bossName || "도전의 탑"}</strong>
@@ -416,12 +434,12 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
           </div>
         </article>
 
-        <article className="paper-sheet paper-sheet-share">
-          <p className="micro-label">ANCHOR CARD</p>
+        <article className="sheet sheet-share">
+          <p className="eyebrow">ANCHOR CARD</p>
           <h2>{shareCard.title || `${profile.jobLabel || "학습자"} · ${profile.equippedTitle || "대표 호칭 없음"}`}</h2>
           <p>{shareCard.subtitle || "profile reader anchor"}</p>
           <small>{shareCard.body || artifacts.summary || "메모장과 유물 기록이 쌓이면 이 카드도 같이 바뀝니다."}</small>
-          <div className="share-links">
+          <div className="chip-row">
             <a href={shareCard.profileAnchorUrl || "#profile"}>프로필</a>
             <a href={shareCard.memoAnchorUrl || "#memo"}>메모장</a>
             <a href={shareCard.artifactsAnchorUrl || "#artifacts"}>유물</a>
@@ -429,21 +447,21 @@ function ProfileShell({ snapshot }: { snapshot: NonNullable<SnapshotResponse["da
         </article>
       </section>
 
-      <section className="artifact-stage" id="artifacts">
-        <div className="artifact-header">
+      <section className="artifact-archive" id="artifacts">
+        <div className="dock-head">
           <div>
-            <p className="micro-label">ARTIFACT ARCHIVE</p>
+            <p className="eyebrow">ARTIFACT ARCHIVE</p>
             <h2>유물 도감</h2>
           </div>
-          <p>{artifacts.summary || "유물은 이 유저의 협동 기록 보조 지표다. 프로필 전면이 아니라 뒤쪽 아카이브에 둔다."}</p>
+          <p>{artifacts.summary || "유물은 전면 히어로가 아니라 협동 기록의 후면 인덱스다."}</p>
         </div>
-        <div className="artifact-wall">
+        <div className="artifact-grid">
           {artifactCards.map((artifact) => (
-            <article className={`artifact-entry${artifact.unlocked ? " is-unlocked" : ""}`} key={artifact.id}>
-              <div className="artifact-visual">
+            <article className={`artifact-card${artifact.unlocked ? " unlocked" : ""}`} key={artifact.id}>
+              <div className="artifact-thumb">
                 <img src={artifact.imagePath} alt={artifact.name} loading="lazy" />
               </div>
-              <div className="artifact-meta">
+              <div className="artifact-copy">
                 <span>{artifact.subject}</span>
                 <h3>{artifact.name}</h3>
                 <p>{artifact.description}</p>
