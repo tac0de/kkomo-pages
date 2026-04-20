@@ -1,33 +1,40 @@
 # Kkomo Pages
 
-GitHub Pages용 정적 프런트엔드입니다.
+꼬모 프로필 열람판용 GitHub Pages 프론트엔드입니다.
 
-## 모드
+## 기술 스택
 
-- 공개 모드: 소개 / 사용법 / 플레이어 모드 안내
-- 플레이어 모드: `one-time code`를 백엔드와 교환해서 프로필 / 뽑기 / 컬렉션 / 꾸미기 표시
+- `Vite`
+- `React`
+- `TypeScript`
 
-## 예상 API
+## 랜딩 모드
 
-- `POST /api/web/session/exchange`
-- `GET /api/web/me`
-- `GET /api/web/collection`
-- `POST /api/web/gacha/draw`
-- `POST /api/web/profile/customize`
-- `GET /api/web/rewards`
+- `intro`: 유효한 유저 프로필 링크가 없을 때 보이는 소개 모드
+- `loading`: 공개 snapshot을 읽는 중인 상태
+- `profile`: 유효한 snapshot이 있을 때 보이는 개인 프로필 열람판
+- `invalid-link`: 링크가 열렸지만 실제로 열람 가능한 기록을 불러오지 못한 상태
 
-## 설정
+## 공개 API
 
-- `apiBase`는 URL query `?apiBase=` 또는 localStorage `kkomo-pages:api-base`로 저장합니다.
-- `code` query가 있으면 `session/exchange`를 먼저 시도합니다.
+- `GET /api/public/landing-snapshot`
 
-## 저장소
+query:
+- `userId`
+- `conversationKey`
+- `apiBase`
 
-- localStorage는 UI 캐시와 마지막 탭만 저장합니다.
-- 실제 보유 상태와 결과는 백엔드 응답을 기준으로 다시 읽습니다.
+## 개발
+
+```bash
+npm install
+npm run dev
+```
+
+기본 API base는 앱 코드 안의 dev Cloud Run URL을 사용합니다.
 
 ## 배포
 
-- GitHub Pages 배포는 이 저장소의 [.github/workflows/deploy-pages.yml](./.github/workflows/deploy-pages.yml) 에서 처리합니다.
+- GitHub Pages 배포는 [.github/workflows/deploy-pages.yml](./.github/workflows/deploy-pages.yml) 에서 처리합니다.
 - `main` push 와 `workflow_dispatch` 에서만 배포됩니다.
-- 배포 대상은 저장소 루트 전체입니다.
+- 배포 대상은 `npm run build` 결과물인 `dist/`입니다.
